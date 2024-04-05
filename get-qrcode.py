@@ -118,8 +118,7 @@ def main(file_path: Union[PathLike, Path, str]) -> None:
     server_file_local_url, server_file_online_url = data['local_url'], data['online_url']
     show_qrcode_in_terminal(server_file_online_url)
 
-    print(f'\nScan the QR code with your mobile device to download the file or access the link: {server_file_online_url}\n')
-    input('Press Enter to end the server...\n')
+    input(f'\nQR Code was successfully generated! - URL: {server_file_online_url} - Press Enter to stop the server...')
 
     change_terminal_size(width=80, height=25)
     exit(0)
