@@ -1,7 +1,7 @@
 import qrcode
 from socket import gethostname, gethostbyname
 from subprocess import run
-from flask import Flask, send_file, Response, redirect, request
+from flask import cli as flask_cli, Flask, send_file, Response, redirect, request
 from threading import Thread
 from pathlib import Path
 from os import PathLike
@@ -10,12 +10,16 @@ from argparse import ArgumentParser
 from platform import system
 from random import choice
 from string import ascii_letters, digits
+from logging import getLogger
 from sys import exit
 
 
-generated_id = None
-
 app = Flask(__name__)
+
+flask_cli.show_server_banner = lambda *args: None
+getLogger('werkzeug').disabled = True
+
+generated_id = None
 
 
 def change_terminal_size(width: int, height: int) -> None:
@@ -106,18 +110,16 @@ def main(file_path: Union[PathLike, Path, str]) -> None:
     file_path = Path(file_path).resolve()
     server_port = 8080
 
+    server_thread = Thread(target=serve_http_server, args=(server_port,))
+    server_thread.daemon = True
+    server_thread.start()
+
     data = generate_file_download_url(file_path, server_port)
     server_file_local_url, server_file_online_url = data['local_url'], data['online_url']
     show_qrcode_in_terminal(server_file_online_url)
 
     print(f'\nScan the QR code with your mobile device to download the file or access the link: {server_file_online_url}\n')
-    print('Press Enter to end the server...\n')
-
-    server_thread = Thread(target=serve_http_server, args=(server_port,))
-    server_thread.daemon = True
-    server_thread.start()
-
-    input()
+    input('Press Enter to end the server...\n')
 
     change_terminal_size(width=80, height=25)
     exit(0)
