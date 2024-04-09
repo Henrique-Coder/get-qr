@@ -1,2 +1,2 @@
-### Get QR Code
-- This is a script that generates a url and displays it on your terminal in QR Code format. It can be used to transfer files from your computer to other devices that are connected to the same network as yours.
+### Get QR
+- This is a script that generates local links and displays them on your terminal in QR Code format. It can be used to transfer files from your computer to other devices. It can also be used to generate a local link for other devices to send files to your computer easily and beautifully. The links only work for devices that are on the same network as yours.
